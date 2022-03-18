@@ -8,8 +8,10 @@ import { MdPlayArrow, MdOutlinePause } from 'react-icons/md'
 import Countdown from 'react-countdown'
 import { motion } from 'framer-motion' 
 import useGlobal from '../hooks/useGlobal'
+import Fade from 'react-reveal/Fade'
 
 const MotionBox = motion(Box)
+const MotionButton = motion(Button)
  
 const ItemCard = ({ image, avatar, listingType, expiration, user, name, categories, usdPrice, playing, onPlay, price, currency, edition, colorMode }) => (
     <MotionBox
@@ -107,14 +109,36 @@ export const TrendingList = ({ data, colorMode, onPlay }) => {
 
     return (
         <Stack mb={10}>
-            <Heading mb={5}>
-                Trending
-            </Heading>
-            <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={2}>
-                {data.map((d, i) => (
-                    <ItemCard onPlay={() => actions.setAudio(d)} colorMode={colorMode} key={d.listingId} {...d} />
-                ))}
-            </Grid>
+            <HStack justify="space-between">
+                <Heading mb={5}>
+                    Trending
+                </Heading>
+                <Text color="gray.500" fontSize="xl" fontWeight="bold">See All</Text>
+            </HStack>
+            <Fade bottom cascade>
+                <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={2}>
+                    {data.map((d, i) => (
+                        <ItemCard onPlay={() => actions.setAudio(d)} colorMode={colorMode} key={d.listingId} {...d} />
+                    ))}
+                </Grid>
+                <Stack align="center">
+                    <MotionButton
+                        whileHover={{ scale: 1.05 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20
+                        }}
+                        variant="outlined"
+                        w={{ base: 'full', md: 'full', lg: 'sm' }}
+                        border="1px solid #2EB745"
+                        mt={5}
+                        borderRadius="full"
+                        >
+                        View More
+                    </MotionButton>
+                </Stack>
+            </Fade>
         </Stack>
     )
 }

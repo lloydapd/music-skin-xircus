@@ -4,6 +4,7 @@ import {
     Slider, SliderFilledTrack, SliderTrack,
     SliderThumb, Image, Text, Heading, Button,
     useColorMode, Spacer, useDisclosure, Slide,
+    Avatar
 } from '@chakra-ui/react'
 import {
     MdShuffle, MdPlayArrow, MdPause, MdSkipPrevious,
@@ -57,15 +58,22 @@ export const AudioPlayer = ({ music, colorMode }) => {
                 <HStack flex={1}>
                     <Image onClick={onToggle} display={state.item ? 'block' : 'none'} borderRadius="lg" src={state.item.image} boxSize={90} />
                     <Stack display={state.item ? 'block' : 'none'} spacing={0} ml={5}>
-                        <Text fontSize="md" fontWeight="bold" w={180} isTruncated>{state.item && state.item.name}</Text>
+                        <Text fontSize="md" fontWeight="bold" w={150} isTruncated>{state.item && state.item.name}</Text>
+                        <HStack spacing={1} fontSize="xs">
+                            <Avatar src={state.item && state.item.currency.logo} size="xs" />
+                            {state.item.listingType == "auction" ? <Text>From</Text> : null}
+                            <Text fontWeight="bold">{state.item.price} {state.item && state.item.currency.symbol}</Text>
+                            <Text>{state.item.edition}</Text>
+                        </HStack>
                         <Text fontSize="sm">{state.item && state.item.categories.join(' | ')}</Text>
                     </Stack>
-                    <Box display={state.item ? 'block' : 'none'}>
+                    <Spacer display={{ base: 'block', md: 'block', lg: 'none' }} />
+                    <Box display={state.item ? 'block' : 'none'} color="white">
                         {
                             state.item && state.item.listingType == 'auction' ?
-                                <Button display={{ base: 'none', md: 'none', lg: 'block' }} _hover={{ bgColor: 'green.500' }} borderRadius="full" size="sm" bgColor="#2EB745">Bid Now</Button>
+                                <Button _hover={{ bgColor: 'green.500' }} borderRadius="full" size="sm" bgColor="#2EB745">Bid Now</Button>
                                 :
-                                <Button display={{ base: 'none', md: 'none', lg: 'block' }} _hover={{ bgColor: 'green.500' }} borderRadius="full" size="sm" bgColor="#2EB745" >Buy Now</Button>
+                                <Button _hover={{ bgColor: 'green.500' }} borderRadius="full" size="sm" bgColor="#2EB745" >Buy Now</Button>
                         }
                     </Box>
                 </HStack>
@@ -115,18 +123,17 @@ export const AudioPlayer = ({ music, colorMode }) => {
                     </Slider>
                 </HStack>
                 {audio}
-
             </HStack>
             <Slide in={isOpen} direction="bottom">
-                <Box h={520} bgColor={colorMode == 'dark' ? "#151515" : 'gray.300'} p="20px" css={{ borderRadius: '10px', zIndex: 9999 }}>
+                <Box h={550} bgColor={colorMode == 'dark' ? "#151515" : 'gray.300'} p="20px" css={{ borderRadius: '10px', zIndex: 9999 }}>
                     <HStack>
-                        <IconButton bgColor="gray.600" onClick={onToggle} icon={<MdClose />} />
+                        <IconButton bgColor="gray.600" onClick={onToggle} icon={<MdClose color="white" size={20} />} />
                         <Spacer />
                         {
                             state.item.listingType == "auction" ?
-                                <Button bgColor="#22C95C" style={{ borderRadius: '30px' }}>Bid now</Button>
+                                <Button color="white" bgColor="#22C95C" style={{ borderRadius: '30px' }}>Bid now</Button>
                                 :
-                                <Button bgColor="#22C95C" style={{ borderRadius: '30px' }}>Buy now</Button>
+                                <Button color="white" bgColor="#22C95C" style={{ borderRadius: '30px' }}>Buy now</Button>
                         }
                     </HStack>
                     <Box align="center" mt="20px">
@@ -134,6 +141,12 @@ export const AudioPlayer = ({ music, colorMode }) => {
                     </Box>
                     <Box align="center" mt="20px">
                         <Text fontSize="20px" fontWeight="bold">{state.item.name}</Text>
+                        <HStack spacing={1} mt={1} fontSize="xs" justify="center">
+                            <Avatar src={state.item && state.item.currency.logo} size="xs" />
+                            {state.item.listingType == "auction" ? <Text>From</Text> : null}
+                            <Text fontWeight="bold">{state.item.price} {state.item && state.item.currency.symbol}</Text>
+                            <Text>{state.item.edition}</Text>
+                        </HStack>
                     </Box>
                     <HStack justify="center" mt="20px">
                         <ControlButton icon={<MdShuffle />} />
@@ -179,7 +192,7 @@ export const AudioPlayer = ({ music, colorMode }) => {
                             max={1.0}
                             value={state.volume}
                             defaultValue={0.3}
-                        >
+                            >
                             <SliderTrack bg='black'>
                                 <SliderFilledTrack bg='white' />
                             </SliderTrack>

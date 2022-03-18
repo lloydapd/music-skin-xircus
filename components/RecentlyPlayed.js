@@ -7,8 +7,10 @@ import {
 import { MdPlayArrow, MdOutlinePause } from 'react-icons/md'
 import Countdown from 'react-countdown'
 import { motion } from 'framer-motion'
+import Fade from 'react-reveal/Fade'
 
 const MotionBox = motion(Box)
+const MotionButton = motion(Button)
 
 const ItemCard = ({ image, avatar, listingType, expiration, user, name, categories, usdPrice, playing, price, currency, edition, colorMode }) => (
     <MotionBox
@@ -62,7 +64,7 @@ const ItemCard = ({ image, avatar, listingType, expiration, user, name, categori
                 <HStack spacing={1}>
                     <Avatar src={currency.logo} size="xs" />
                     {listingType == "auction" ? <Text>From</Text> : null}
-                    <Text fontWeight="bold">{price}</Text>
+                    <Text fontWeight="bold">{price} {currency.symbol}</Text>
                     <Text>{edition}</Text>
                 </HStack>
                 <HStack spacing={1}>
@@ -90,14 +92,36 @@ const ItemCard = ({ image, avatar, listingType, expiration, user, name, categori
 export const RecentlyPlayed = ({ data, colorMode }) => {
     return (
         <Stack mb={10}>
-            <Heading mb={5}>
-                Recently Played
-            </Heading>
-            <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={2}>
-                {data.map((d, i) => (
-                    <ItemCard colorMode={colorMode} key={d.listingId} {...d} />
-                ))}
-            </Grid>
+            <HStack justify="space-between">
+                <Heading mb={5}>
+                    Recently Played
+                </Heading>
+                <Text color="gray.500" fontSize="xl" fontWeight="bold">See All</Text>
+            </HStack>
+            <Fade bottom cascade>
+                <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={2}>
+                    {data.map((d, i) => (
+                        <ItemCard colorMode={colorMode} key={d.listingId} {...d} />
+                    ))}
+                </Grid>
+                <Stack align="center">
+                    <MotionButton
+                        whileHover={{ scale: 1.05 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20
+                        }}
+                        variant="outlined"
+                        w={{ base: 'full', md: 'full', lg: 'sm' }}
+                        border="1px solid #2EB745"
+                        mt={5}
+                        borderRadius="full"
+                        >
+                        View More
+                    </MotionButton>
+                </Stack>
+            </Fade>
         </Stack>
     )
 }

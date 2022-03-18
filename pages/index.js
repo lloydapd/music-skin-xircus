@@ -8,7 +8,7 @@ import {
   Button, Text, Avatar, VStack, Spacer
 } from '@chakra-ui/react'
 import {
-  AppLayout, TrendingList, Categories, RecentlyPlayed
+  AppLayout, TrendingList, Categories, RecentlyPlayed, Hero
 } from '../components'
 import {
   MdOutlineDashboard, MdPlaylistPlay, MdKeyboardArrowDown, MdMenu, MdOutlineClose,
@@ -133,6 +133,7 @@ export default function Home() {
   
   return (
     <AppLayout>
+      <Hero/>
       <Categories categories={categories} colorMode={colorMode} />
       <TrendingList colorMode={colorMode} data={data} />
       <RecentlyPlayed colorMode={colorMode} data={data} />

@@ -8,9 +8,9 @@ import {
     DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton,
 } from '@chakra-ui/react'
 import {
-    MdOutlineDashboard, MdPlaylistPlay, MdKeyboardArrowDown, MdMenu, MdOutlineClose,
+    MdOutlineDashboard, MdPlaylistPlay, MdKeyboardArrowDown, MdOutlineMenu, MdOutlineClose,
     MdStackedBarChart, MdListAlt, MdQueueMusic, MdFeaturedPlayList, MdOutlineSearch, MdChevronRight,
-    MdBrightnessMedium, MdLanguage, MdLogout, MdSearch, MdOutlineGroup
+    MdBrightnessMedium, MdLanguage, MdLogout, MdSearch, MdOutlineGroup, MdClose, MdModeNight
 } from 'react-icons/md'
 import { AudioPlayer } from './AudioPlayer'
 import { useWallet } from 'use-wallet'
@@ -75,7 +75,7 @@ export const AppLayout = ({ children, music }) => {
                 }
             </Stack>
             <Container maxW="container.lg" h="auto" bgColor={colorMode == 'dark' ? 'black' : 'white'} pb={115} >
-                <HStack flex={1} justify={{ base: 'space-between', md: 'space-between', lg: 'flex-end' }} p={5}>
+                <HStack flex={1} justify={{ base: 'space-between', md: 'space-between', lg: 'flex-end' }} py={5}>
                     <Avatar display={{ base: 'block', md: 'block', lg: 'none' }} bgColor="transparent" src="https://icoholder.com/files/img/6f7203a158209cb2e9143d6631cbb7c2.png" size="md" />
                     <IconButton
                         _hover={{ bgColor: 'none' }}
@@ -83,7 +83,7 @@ export const AppLayout = ({ children, music }) => {
                         bgColor="transparent"
                         display={{ base: 'block', md: 'block', lg: 'none' }}
                         onClick={onOpen}
-                        icon={<MdMenu size={40} />}
+                        icon={<MdOutlineMenu size={40} />}
                         color={colorMode == 'dark' ? 'white' : 'black'}
                         />
                     <Box display={{ base: 'none', md: 'none', lg: 'block' }}>
@@ -169,13 +169,19 @@ export const AppLayout = ({ children, music }) => {
                 >
                 <DrawerOverlay />
                 <DrawerContent bgColor={colorMode == 'dark' ? '#151515' : 'white'}>
-                    <DrawerCloseButton _focus={{ outline: 'none' }} />
                     <DrawerBody>
-                        <Stack mt={10}>
-                            <Avatar mb={5} ml={5} bgColor="transparent" src="https://icoholder.com/files/img/6f7203a158209cb2e9143d6631cbb7c2.png" size="md" />
+                        <HStack align="center" justify="space-between">
+                            <Avatar bgColor="transparent" src="https://icoholder.com/files/img/6f7203a158209cb2e9143d6631cbb7c2.png" size="md" />
+                            <HStack>
+                                <IconButton _focus={{ outline: 'none' }} onClick={toggleColorMode} variant="ghost" icon={colorMode == 'dark' ? <MdBrightnessMedium size={30} /> : <MdModeNight size={30} />} />
+                                <IconButton _focus={{ outline: 'none' }} onClick={onClose} variant="ghost" icon={<MdClose size={30} />} />
+                            </HStack>
+                        </HStack>
+                        <Stack mt={5}>
                             {
                                 nav.map((n, index) => (
                                     <Button
+                                        _focus={{ outline: 'none' }}
                                         color={colorMode === 'dark' ? 'white' : 'black'}
                                         variant="ghost"
                                         w="full"
@@ -187,15 +193,52 @@ export const AppLayout = ({ children, music }) => {
                                     </Button>
                                 ))
                             }
-                            <Button display={ wallet.status == 'connected' ? 'none' : 'block' } borderRadius="full" size="sm" bgColor="#2EB745" color="white" onClick={() => wallet.connect()}>Connect Wallet</Button>
-                            <Stack display={wallet.status == 'connected' ? 'block' : 'none'} mt={20} p={3} h={200} w="100%" borderRadius={10} border="1px solid gray">
-                                <HStack justify="space-between">
-                                    <Avatar size="lg" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" />
-                                    <IconButton borderRadius="full" _focus={{ outline: 'none' }} size="lg" icon={<MdBrightnessMedium color="gray.800" size={30} />} variant="ghost" onClick={toggleColorMode} />
-                                </HStack>
-                                <Text fontSize="xl" fontWeight="bold">Jonathan Gomez</Text>
-                                <Text fontSize="md" w={200} fontWeight="bold" isTruncated>{wallet.account}</Text>
+                            <Stack display={wallet.status == 'connected' ? 'block' : 'none'}>
+                                <Button
+                                    _focus={{ outline: 'none' }}
+                                    color={colorMode === 'dark' ? 'white' : 'black'}
+                                    variant="ghost"
+                                    w="full"
+                                    display="flex"
+                                    style={{ justifyContent: 'flex-start' }}
+                                    >
+                                    <MdPlaylistPlay />
+                                    <Text pl={4} fontWeight="bold">My Collections</Text>
+                                </Button>
+                                <Button
+                                    _focus={{ outline: 'none' }}
+                                    color={colorMode === 'dark' ? 'white' : 'black'}
+                                    variant="ghost"
+                                    w="full"
+                                    display="flex"
+                                    style={{ justifyContent: 'flex-start' }}
+                                    >
+                                    <MdLanguage />
+                                    <Text pl={4} fontWeight="bold">Language</Text>
+                                </Button>
+                                <Button
+                                    _focus={{ outline: 'none' }}
+                                    color={colorMode === 'dark' ? 'white' : 'black'}
+                                    variant="ghost"
+                                    w="full"
+                                    display="flex"
+                                    onClick={() => wallet.reset()}
+                                    style={{ justifyContent: 'flex-start' }}
+                                    >
+                                    <MdLogout />
+                                    <Text pl={4} fontWeight="bold">Disconnect</Text>
+                                </Button>
                             </Stack>
+                        </Stack>
+                        <Button mt={3} w="full" display={wallet.status == 'connected' ? 'none' : 'block'} borderRadius="full" size="sm" bgColor="#2EB745" color="white" onClick={() => wallet.connect()}>Connect Wallet</Button>
+                        <Stack mt={3} bgSize="cover" bgImage="https://www.artnews.com/wp-content/uploads/2022/02/Punk-It-Collage-e1644358865879.png?w=1200" display={wallet.status == 'connected' ? 'block' : 'none'} overflow="hidden" w="100%" borderRadius={10}>
+                            <VStack p={2} bgColor="rgba(0,0,0,0.3)" h="full" w="full">
+                                <Avatar size="lg" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60" />
+                                <VStack spacing={1} color="white">
+                                    <Text fontSize="xl" fontWeight="bold">Jonathan Gomez</Text>
+                                    <Text fontSize="md" w={200} fontWeight="bold" isTruncated>{wallet.account}</Text>
+                                </VStack>
+                            </VStack>
                         </Stack>
                     </DrawerBody>
                 </DrawerContent>

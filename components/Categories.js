@@ -1,5 +1,6 @@
 import { Box, Stack, Heading, Image, HStack, Grid, Center, Button, Text } from "@chakra-ui/react"
 import { motion } from 'framer-motion'
+import Fade from 'react-reveal/Fade'
 
 const MotionBox = motion(Box)
 
@@ -30,12 +31,14 @@ export const Categories = ({ colorMode, categories }) => (
         <Heading mb={5}>
             Categories
         </Heading>
-        <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={3}>
-            {
-                categories.map((c, i) => (
-                    <CategoryCard colorMode={colorMode} image={c.image} category={c.name} />
-                ))
-            }
-        </Grid>
+        <Fade bottom cascade>
+            <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={3}>
+                {
+                    categories.map((c, i) => (
+                        <CategoryCard colorMode={colorMode} image={c.image} category={c.name} />
+                    ))
+                }
+            </Grid>
+        </Fade>
     </Stack>
 )
